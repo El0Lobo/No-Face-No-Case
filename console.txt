@@ -1,0 +1,1 @@
+pyinstaller --onefile --noconsole --icon=Ⓐ.ico --collect-all torch --collect-all ultralytics --collect-all omegaconf --add-data Ⓐ.png;. --add-data ⒶCME.png;. --add-data yolov8n-face.pt;. main.py
