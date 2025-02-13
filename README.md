@@ -1,59 +1,126 @@
 No Face No Case
 ===================
 ------------------------------------------------------
-USAGE INSTRUCTIONS
-------------------------------------------------------
+This app allows users to process videos and images by applying face-detection-based effects, such as pixelation, blurring, and overlaying custom images. It is designed to run smoothly with an easy-to-use graphical interface built using 'tkinter'.
+---
 
-1. FILE SETUP:
-   - Select a media file (video/image) using the "Browse" button.
-   - Choose an output folder and set metadata (filename, date, location).
+### **Features**
 
-2. CONFIGURE EFFECTS:
-   - Enable pixelation, blur, or overlay effects.
+- **File Management:**
+  - Select media files (video or image) for processing.
+  - Define an output directory.
+  - Automatically generate metadata (filename, creation date and location).
+  
+- **Effect Options:**
+  - Pixelation effect with adjustable pixel size.
+  - Blur effect with adjustable blur strength.
+  - Overlay custom image on detected faces.
+
+- **Face Detection:**
+  - Uses 'YOLO' face detection for identifying faces in frames.
+  - Expand detected face area with a configurable expansion ratio.
+  
+- **Confidence Threshold:**
+  - Adjust confidence level for face detection to reduce false positives or false negatives.
+
+- **Preview and Controls:**
+  - Real-time preview of image or video.
+  - Enable or disable preview mode.
+  - Play, pause and stop video playback.
+  - Search through video for specific frame using a slider.
+  
+- **Additional Options:**
+  - Enable extra frame processing for smoother transitions.
+  - View file specifications including resolution, FPS and size.
+  
+- **Processing Feedback:**
+  - Progress bar during processing.
+  - Elapsed time display.
+  - Notification upon completion with a link to the output file.
+
+---
+
+### **Installation**
+
+Use the .exe or:
+
+1. Clone or download the repository.
+2. Install the required dependencies using the following command:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Run the application:
+
+   ```bash
+   python main.py
+   ```
+
+---
+
+### **Dependencies**
+
+The following libraries are used in this project:
+
+- 'opencv-python' (cv2)
+- 'ultralytics' (YOLO model)
+- 'tkinter', 'ttkthemes', and 'tkcalendar' (for GUI components)
+- 'Pillow' (for image manipulation)
+- 'ffmpeg-python' (for video processing)
+- 'webbrowser', 'datetime', and 'subprocess' (for auxiliary functions)
+
+---
+
+### **Usage Instructions**
+
+1. **File Setup:**
+   - Select a media file by clicking the "Browse" button.
+   - Define the output folder and file metadata.
+
+2. **Effects Configuration:**
+   - Enable pixelation, blur and overlay effects as needed.
    - Adjust effect parameters using sliders.
 
-3. START PROCESSING:
-   - Click the "Process" button.
-   - Track progress & elapsed time.
-   - Output file saved in the selected directory.
+3. **Processing:**
+   - Click the "Process" button to start.
+   - View progress and elapsed time during the process.
+   - Once completed, the output file will be saved in the specified directory.
 
-4. PREVIEW & CONTROLS:
-   - Preview window for real-time inspection.
-   - Video playback controls: Play, pause, stop, and seek.
+4. **Preview and Controls:**
+   - Use the preview window to inspect your media.
+   - For videos use the play, pause, stop and seek controls.
 
-------------------------------------------------------
-CUSTOMIZABLE OPTIONS
-------------------------------------------------------
+---
 
-Option                  | Description                              | Adjustable Values
-------------------------|------------------------------------------|----------------------
-Pixelation              | Enable/disable pixelation effect        | Checkbox
-Pixel Size             | Adjust pixel size                        | Slider (0.5 to 10)
-Blurring               | Enable/disable blur effect               | Checkbox
-Blur Strength          | Adjust blur intensity                    | Slider (3 to 101)
-Overlay Image          | Apply a custom image to detected faces   | File selection
-Face Expansion             | Expand detected face area                | Slider (0.5 to 2.0)
-Confidence Threshold   | Adjust face detection accuracy           | Slider (0.1 to 1.0)
-Extra FPS             | Enable additional frame processing        | Checkbox + Spinbox (1-15)
-Preview Mode          | Enable/disable real-time preview         | Checkbox
-Media Playback        | Play, pause, stop, and seek videos       | Play, Pause, Stop + Slider
+### **Customizable Options**
 
-------------------------------------------------------
+| Option                | Description                               | Adjustable Values             |
+|-----------------------|-------------------------------------------|-------------------------------|
+| Pixel Size            | Adjust size of pixels                     | 0.5 to 10 (slider)            |
+| Blur Strength         | Adjust blur intensity                     | 3 to 101 (slider)             |
+| Overlay Image         | Add a custom overlay on detected faces    | Select file                   |
+| Face Expansion        | Expand detected face area                 | 0.5 to 2.0 (slider)           |
+| Confidence Threshold  | Adjust face detection confidence          | 0.1 to 1.0 (slider)           |
+| Extra FPS             | Enable additional frames                  | Spinbox (1 to 15)   |
 
-NOTES
-------------------------------------------------------
-- Ensure ffmpeg is installed and added to PATH if not using the exe.
-- Pre-trained YOLO model is required for face detection.
-- Performance may vary for large media files.
+---
 
-------------------------------------------------------
-LICENSE
-------------------------------------------------------
+### **Notes**
+
+- Ensure you have 'ffmpeg' installed and added to your system's PATH.
+- The application uses a pre-trained 'YOLO model' for face detection.
+
+---
+
+### **License**
+
 This project is licensed under the MIT License.
 
-------------------------------------------------------
-CREDITS
-------------------------------------------------------
+---
+
+### **Credits**
+
 Developed by ACME Prototypes.
-Visit: https://acme-prototypes.com/
+Visit: [https://acme-prototypes.com/](https://acme-prototypes.com/)
 
