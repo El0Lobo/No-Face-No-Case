@@ -1,0 +1,20 @@
+pyinstaller --onefile --noconsole --icon="Ⓐ.ico" `
+    --collect-all=tkinter `
+    --collect-all=ultralytics `
+    --collect-all=ttkthemes `
+    --collect-all=tkcalendar `
+    --collect-all=PIL `
+    --collect-all=cv2 `
+    --collect-all=ffmpeg `
+    --add-data="yolov11n-face.pt;." `
+    --add-data="Ⓐ.png;." `
+    --add-data="PixelifySans-Regular.ttf;." `
+    --add-data="ⒶCME.png;." `
+    --add-data="splash.png;." `
+    --add-data="disabled.png;." `
+    --add-data="enabled.png;." `
+    --add-data="default.png;." `
+    --add-data="README.md;." `
+    --add-binary="C:\Users\Lobo\Desktop\demo tool final\.venv\Lib\site-packages\ffmpeg\bin\ffmpeg.exe;." `
+    --version-file=version.txt `
+    main.py

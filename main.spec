@@ -1,14 +1,22 @@
 # -*- mode: python ; coding: utf-8 -*-
 from PyInstaller.utils.hooks import collect_all
 
-datas = [('Ⓐ.png', '.'), ('ⒶCME.png', '.'), ('yolov8n-face.pt', '.')]
-binaries = []
+datas = [('yolov11n-face.pt', '.'), ('Ⓐ.png', '.'), ('PixelifySans-Regular.ttf', '.'), ('ⒶCME.png', '.'), ('splash.png', '.'), ('disabled.png', '.'), ('enabled.png', '.'), ('default.png', '.'), ('README.md', '.')]
+binaries = [('C:\\Users\\Lobo\\Desktop\\demo tool final\\.venv\\Lib\\site-packages\\ffmpeg\\bin\\ffmpeg.exe', '.')]
 hiddenimports = []
-tmp_ret = collect_all('torch')
+tmp_ret = collect_all('tkinter')
 datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 tmp_ret = collect_all('ultralytics')
 datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
-tmp_ret = collect_all('omegaconf')
+tmp_ret = collect_all('ttkthemes')
+datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
+tmp_ret = collect_all('tkcalendar')
+datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
+tmp_ret = collect_all('PIL')
+datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
+tmp_ret = collect_all('cv2')
+datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
+tmp_ret = collect_all('ffmpeg')
 datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 
 
@@ -46,5 +54,6 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    version='version.txt',
     icon=['Ⓐ.ico'],
 )

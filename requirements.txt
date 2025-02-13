@@ -1,5 +1,6 @@
 opencv-python
 ultralytics
-pillow
 tkcalendar
 ttkthemes
+Pillow
+ffmpeg-python

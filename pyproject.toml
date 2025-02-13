@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools", "wheel", "cx_Freeze"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "no-face-no-case"
+version = "1.0.0"
+description = "Video and image processing tool with face effects using YOLO and OpenCV."
+authors = [
+    {name = "Your Name", email = "your.email@example.com"}
+]
+dependencies = [
+    "opencv-python",
+    "pillow",
+    "tkcalendar",
+    "ttkthemes",
+    "ultralytics",
+    "ffmpeg-python"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "flake8"
+]
+
+[project.urls]
+homepage = "https://your-project-homepage.com"
+repository = "https://github.com/your-repo-url"
+
+[tool.setuptools.package-data]
+no-face-no-case = ["*.png", "*.ttf", "*.ico", "*.exe", "yolov11n-face.pt"]
+
+[tool.setuptools.scripts]
+run-no-face-no-case = "main:main"
