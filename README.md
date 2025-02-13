@@ -38,19 +38,6 @@ Extra FPS             | Enable additional frame processing        | Checkbox + S
 Preview Mode          | Enable/disable real-time preview         | Checkbox
 Media Playback        | Play, pause, stop, and seek videos       | Play, Pause, Stop + Slider
 
-Option                  | Description                              | Adjustable Values
-------------------------|------------------------------------------|----------------------
-Pixelation              | Enable/disable pixelation effect        | Checkbox
-Pixel Size             | Adjust pixel size                        | Slider (0.5 to 10)
-Blurring               | Enable/disable blur effect               | Checkbox
-Blur Strength          | Adjust blur intensity                    | Slider (3 to 101)
-Overlay Image          | Apply a custom image to detected faces   | File selection
-Face Expansion        | Expand detected face area                | Slider (0.5 to 2.0)
-Confidence Threshold   | Adjust face detection accuracy           | Slider (0.1 to 1.0)
-Extra FPS             | Enable additional frame processing        | Checkbox + Spinbox (1-15)
-Preview Mode          | Enable/disable real-time preview         | Checkbox
-Media Playback        | Play, pause, stop, and seek videos       | Play, Pause, Stop + Slider
-
 ------------------------------------------------------
 
 NOTES
