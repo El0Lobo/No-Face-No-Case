@@ -14,16 +14,19 @@ jobs:
         include:
           - os: macos-latest
             platform: macos
+            shell: bash
             package_name: No Face No Case-macOS.dmg
             bundle_name: No Face No Case-macOS.zip
             exe_name: ""
           - os: windows-latest
             platform: windows
+            shell: pwsh
             package_name: NoFaceNoCase-windows-bundle.zip
             bundle_name: NoFaceNoCase-windows-bundle.zip
             exe_name: No Face No Case.exe
           - os: ubuntu-latest
             platform: linux
+            shell: bash
             package_name: No Face No Case-linux.tar.gz
             bundle_name: No Face No Case-linux.tar.gz
             exe_name: ""
@@ -39,25 +42,11 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install Linux ffmpeg
-        if: matrix.platform == 'linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
-
-      - name: Install macOS ffmpeg
-        if: matrix.platform == 'macos'
-        run: |
-          if ! command -v ffmpeg >/dev/null 2>&1; then
-            brew update
-            brew install ffmpeg
-          fi
-
-      - name: Upgrade pip
-        run: python -m pip install --upgrade pip
+      - name: Upgrade pip tooling
+        run: python -m pip install --upgrade pip setuptools wheel
 
       - name: Install project requirements
-        run: python -m pip install -r requirements-dev.txt
+        run: python -m pip install -r requirements.txt "pyinstaller>=6.0"
 
       - name: Build macOS app bundle
         if: matrix.platform == 'macos'
@@ -100,18 +89,27 @@ jobs:
           tar -czf "No Face No Case-linux.tar.gz" "No Face No Case"
 
       - name: Stage release files
+        if: matrix.platform == 'windows'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path release | Out-Null
+          Copy-Item "dist/No Face No Case.exe" "release/"
+          Copy-Item "dist/NoFaceNoCase-windows-bundle.zip" "release/"
+
+      - name: Stage release files
+        if: matrix.platform == 'macos'
         shell: bash
         run: |
           mkdir -p release
-          if [ "${{ matrix.platform }}" = "macos" ]; then
-            cp "dist/No Face No Case-macOS.dmg" "release/"
-            cp "dist/No Face No Case-macOS.zip" "release/"
-          elif [ "${{ matrix.platform }}" = "windows" ]; then
-            cp "dist/No Face No Case.exe" "release/"
-            cp "dist/NoFaceNoCase-windows-bundle.zip" "release/"
-          else
-            cp "dist/No Face No Case-linux.tar.gz" "release/"
-          fi
+          cp "dist/No Face No Case-macOS.dmg" "release/"
+          cp "dist/No Face No Case-macOS.zip" "release/"
+
+      - name: Stage release files
+        if: matrix.platform == 'linux'
+        shell: bash
+        run: |
+          mkdir -p release
+          cp "dist/No Face No Case-linux.tar.gz" "release/"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -137,4 +135,5 @@ jobs:
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ github.ref_name }}
           files: release-assets/*

@@ -17,11 +17,11 @@ if not defined PYTHON (
 )
 
 if "%PYTHON%"=="py -3" (
-    py -3 -m pip install -r requirements-dev.txt
+    py -3 -m pip install -r requirements.txt "pyinstaller>=6.0"
 ) else if "%PYTHON%"=="python" (
-    python -m pip install -r requirements-dev.txt
+    python -m pip install -r requirements.txt "pyinstaller>=6.0"
 ) else (
-    "%PYTHON%" -m pip install -r requirements-dev.txt
+    "%PYTHON%" -m pip install -r requirements.txt "pyinstaller>=6.0"
 )
 
 if "%PYTHON%"=="py -3" (
