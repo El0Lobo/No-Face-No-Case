@@ -62,7 +62,7 @@ jobs:
 
       - name: Build Linux bundle
         if: matrix.platform == 'linux'
-        run: python -m PyInstaller --noconfirm --clean --name "No Face No Case" main.py
+        run: python -m PyInstaller --noconfirm --clean NoFaceNoCaseLite.spec
 
       - name: Package macOS bundle
         if: matrix.platform == 'macos'
@@ -86,7 +86,7 @@ jobs:
         if: matrix.platform == 'linux'
         run: |
           cd dist
-          tar -czf "No Face No Case-linux.tar.gz" "No Face No Case"
+          tar -czf "No Face No Case-linux.tar.gz" "No Face No Case Lite"
 
       - name: Stage release files
         if: matrix.platform == 'windows'

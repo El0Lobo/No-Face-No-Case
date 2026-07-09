@@ -27,12 +27,12 @@ jobs:
         run: python -m pip install -r requirements.txt "pyinstaller>=6.0"
 
       - name: Build app bundle
-        run: python -m PyInstaller --noconfirm --clean --name "No Face No Case" main.py
+        run: python -m PyInstaller --noconfirm --clean NoFaceNoCaseLite.spec
 
       - name: Package app bundle
         run: |
           cd dist
-          tar -czf "No Face No Case-linux.tar.gz" "No Face No Case"
+          tar -czf "No Face No Case-linux.tar.gz" "No Face No Case Lite"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
