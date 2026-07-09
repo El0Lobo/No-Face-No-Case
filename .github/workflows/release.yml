@@ -14,22 +14,14 @@ jobs:
         include:
           - os: macos-latest
             platform: macos
-            shell: bash
             package_name: No Face No Case-macOS.dmg
             bundle_name: No Face No Case-macOS.zip
             exe_name: ""
           - os: windows-latest
             platform: windows
-            shell: pwsh
             package_name: NoFaceNoCase-windows-bundle.zip
             bundle_name: NoFaceNoCase-windows-bundle.zip
             exe_name: No Face No Case.exe
-          - os: ubuntu-latest
-            platform: linux
-            shell: bash
-            package_name: No Face No Case-linux.tar.gz
-            bundle_name: No Face No Case-linux.tar.gz
-            exe_name: ""
 
     runs-on: ${{ matrix.os }}
 
@@ -60,10 +52,6 @@ jobs:
         if: matrix.platform == 'windows'
         run: python -m PyInstaller --noconfirm --clean NoFaceNoCaseOneFile.spec
 
-      - name: Build Linux bundle
-        if: matrix.platform == 'linux'
-        run: python -m PyInstaller --noconfirm --clean NoFaceNoCaseLite.spec
-
       - name: Package macOS bundle
         if: matrix.platform == 'macos'
         run: |
@@ -82,12 +70,6 @@ jobs:
         run: |
           Compress-Archive -Path "dist/No Face No Case/*" -DestinationPath "dist/NoFaceNoCase-windows-bundle.zip" -Force
 
-      - name: Package Linux bundle
-        if: matrix.platform == 'linux'
-        run: |
-          cd dist
-          tar -czf "No Face No Case-linux.tar.gz" "No Face No Case Lite"
-
       - name: Stage release files
         if: matrix.platform == 'windows'
         shell: pwsh
@@ -103,13 +85,6 @@ jobs:
           mkdir -p release
           cp "dist/No Face No Case-macOS.dmg" "release/"
           cp "dist/No Face No Case-macOS.zip" "release/"
-
-      - name: Stage release files
-        if: matrix.platform == 'linux'
-        shell: bash
-        run: |
-          mkdir -p release
-          cp "dist/No Face No Case-linux.tar.gz" "release/"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
