@@ -1,0 +1,60 @@
+name: Build macOS App
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ffmpeg
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            brew update
+            brew install ffmpeg
+          fi
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip
+
+      - name: Install project requirements
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Build app bundle
+        run: python -m PyInstaller --noconfirm --clean --windowed --name "No Face No Case" main.py
+
+      - name: Package app bundle
+        run: |
+          cd dist
+          ditto -c -k --sequesterRsrc --keepParent "No Face No Case.app" "No Face No Case-macOS.zip"
+
+      - name: Package DMG
+        run: |
+          cd dist
+          hdiutil create \
+            -volname "No Face No Case" \
+            -srcfolder "No Face No Case.app" \
+            -ov \
+            -format UDZO \
+            "No Face No Case-macOS.dmg"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: No Face No Case macOS
+          path: |
+            dist/No Face No Case-macOS.zip
+            dist/No Face No Case-macOS.dmg

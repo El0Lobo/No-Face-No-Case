@@ -1,0 +1,46 @@
+name: Build Windows Exe
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install project requirements
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Build folder bundle
+        run: python -m PyInstaller --noconfirm --clean NoFaceNoCase.spec
+
+      - name: Package folder bundle
+        shell: pwsh
+        run: |
+          Compress-Archive -Path "dist/No Face No Case/*" -DestinationPath "dist/NoFaceNoCase-windows-bundle.zip" -Force
+
+      - name: Build one-file exe
+        run: python -m PyInstaller --noconfirm --clean NoFaceNoCaseOneFile.spec
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: No Face No Case Windows
+          path: |
+            dist/No Face No Case.exe
+            dist/NoFaceNoCase-windows-bundle.zip

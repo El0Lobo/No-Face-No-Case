@@ -1,126 +1,167 @@
-No Face No Case
-===================
-------------------------------------------------------
-This app allows users to process videos and images by applying face-detection-based effects, such as pixelation, blurring, and overlaying custom images. It is designed to run smoothly with an easy-to-use graphical interface built using 'tkinter'.
----
+# No Face No Case
 
-### **Features**
+No Face No Case is an offline desktop privacy planner for blurring, pixelating, or overlaying sensitive areas in images and videos.
 
-- **File Management:**
-  - Select media files (video or image) for processing.
-  - Define an output directory.
-  - Automatically generate metadata (filename, creation date and location).
-  
-- **Effect Options:**
-  - Pixelation effect with adjustable pixel size.
-  - Blur effect with adjustable blur strength.
-  - Overlay custom image on detected faces.
+This update moves the app further toward a planner-first workflow: review detections, choose face or person mode, add manual timeline boxes, remember people that should stay clear, then export a processed copy with the original audio preserved.
 
-- **Face Detection:**
-  - Uses 'YOLO' face detection for identifying faces in frames.
-  - Expand detected face area with a configurable expansion ratio.
-  
-- **Confidence Threshold:**
-  - Adjust confidence level for face detection to reduce false positives or false negatives.
+## Update Highlights
 
-- **Preview and Controls:**
-  - Real-time preview of image or video.
-  - Enable or disable preview mode.
-  - Play, pause and stop video playback.
-  - Search through video for specific frame using a slider.
-  
-- **Additional Options:**
-  - Enable extra frame processing for smoother transitions.
-  - View file specifications including resolution, FPS and size.
-  
-- **Processing Feedback:**
-  - Progress bar during processing.
-  - Elapsed time display.
-  - Notification upon completion with a link to the output file.
+- Offline YOLO detection with bundled model assets.
+- Face mode using the bundled YOLO26 face detector.
+- Person mode using YOLO26 person detection.
+- Person percentage slider: affect the full person or only the top part of the detected person box.
+- Timeline editor for manual boxes.
+- Each manual box has its own timeline row.
+- Drag timeline handles to shorten or prolong a box.
+- Drag the timeline bar to move the whole box in time.
+- Manual boxes can ease between keyframed positions when moved later in the video.
+- Double-click detections to remember faces or persons that should stay clear.
+- Right-click detections to ignore false positives.
+- Audio-preserving video export through local FFmpeg when available.
+- Preview detection boxes stay preview-only and are not drawn into exported media.
 
----
+## Modes
 
-### **Installation**
+### Detection Area
 
-Use the .exe or:
+- `Face area`: uses the face detector and affects detected face boxes.
+- `Person`: switches to YOLO26 person detection and affects detected person boxes.
 
-1. Clone or download the repository.
-2. Install the required dependencies using the following command:
+The `Person percentage` slider controls how much of the detected person box is affected:
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+- `100%`: full person.
+- `33%`: roughly the top third.
+- Lower values: smaller area from the top of the person box.
 
-3. Run the application:
+### Effect Target
 
-   ```bash
-   python main.py
-   ```
+- Blur or pixelate detected faces/persons.
+- Keep remembered or protected areas clear while affecting the background.
 
----
+## Planner Workflow
 
-### **Dependencies**
+1. Choose an image or video.
+2. Pick `Face area` or `Person`.
+3. Adjust confidence, expansion, person percentage, blur, pixel size, and effect hold frames.
+4. Review green detection boxes in the preview.
+5. Right-click a detection to ignore it.
+6. Double-click a detection to remember that face/person and keep it clear.
+7. Drag manual boxes onto the preview for custom clear/effect regions.
+8. Use the timeline to move, shorten, prolong, or keyframe manual boxes.
+9. Export the processed media.
 
-The following libraries are used in this project:
+## Timeline Editing
 
-- 'opencv-python' (cv2)
-- 'ultralytics' (YOLO model)
-- 'tkinter', 'ttkthemes', and 'tkcalendar' (for GUI components)
-- 'Pillow' (for image manipulation)
-- 'ffmpeg-python' (for video processing)
-- 'webbrowser', 'datetime', and 'subprocess' (for auxiliary functions)
+Manual boxes appear as rows in the timeline.
 
----
+- Drag the left or right handle to change duration.
+- Drag the colored bar to move the box along the timeline.
+- Move a box in the preview at a later frame to create a motion stop.
+- The box eases between stops unless another stop is set.
+- Use `Delete selected box` to remove the selected manual box.
 
-### **Usage Instructions**
+## Export
 
-1. **File Setup:**
-   - Select a media file by clicking the "Browse" button.
-   - Define the output folder and file metadata.
+Images are written directly.
 
-2. **Effects Configuration:**
-   - Enable pixelation, blur and overlay effects as needed.
-   - Adjust effect parameters using sliders.
+Videos are processed frame by frame. The app writes a temporary processed video, then uses local FFmpeg to mux the original audio into the final output. If FFmpeg is not available, export still succeeds as a silent processed video.
 
-3. **Processing:**
-   - Click the "Process" button to start.
-   - View progress and elapsed time during the process.
-   - Once completed, the output file will be saved in the specified directory.
+Detection guide boxes are only part of the preview UI. They are not rendered into exported output.
 
-4. **Preview and Controls:**
-   - Use the preview window to inspect your media.
-   - For videos use the play, pause, stop and seek controls.
+## Run From Source
 
----
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python main.py
+```
 
-### **Customizable Options**
+On Windows PowerShell:
 
-| Option                | Description                               | Adjustable Values             |
-|-----------------------|-------------------------------------------|-------------------------------|
-| Pixel Size            | Adjust size of pixels                     | 0.5 to 10 (slider)            |
-| Blur Strength         | Adjust blur intensity                     | 3 to 101 (slider)             |
-| Overlay Image         | Add a custom overlay on detected faces    | Select file                   |
-| Face Expansion        | Expand detected face area                 | 0.5 to 2.0 (slider)           |
-| Confidence Threshold  | Adjust face detection confidence          | 0.1 to 1.0 (slider)           |
-| Extra FPS             | Enable additional frames                  | Spinbox (1 to 15)   |
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+py main.py
+```
 
----
+## One-Click Starters
 
-### **Notes**
+- `start-macos.command` for macOS
+- `start-linux.sh` for Linux
+- `start-windows.bat` for Windows
 
-- Ensure you have 'ffmpeg' installed and added to your system's PATH.
-- The application uses a pre-trained 'YOLO model' for face detection.
+Each launcher runs `main.py` from the repo root and prefers the local `.venv` interpreter if it exists.
+If `ffmpeg` is missing, the launcher will try to install it with the platform package manager before the app starts.
 
----
+## Build
 
-### **License**
+For desktop bundles, use PyInstaller from a clean virtual environment.
 
-This project is licensed under the MIT License.
+Full build:
 
----
+```bash
+pip install -r requirements-dev.txt
+pyinstaller --noconfirm --clean NoFaceNoCase.spec
+```
 
-### **Credits**
+Smaller build with face and person detection:
 
-Developed by ACME Prototypes.
-Visit: [https://acme-prototypes.com/](https://acme-prototypes.com/)
+```bash
+pip install -r requirements-dev.txt
+pyinstaller --noconfirm --clean NoFaceNoCaseLite.spec
+```
 
+On Windows, you can also run:
+
+```powershell
+.\build-windows.bat
+```
+
+For the smaller face-and-person package:
+
+```powershell
+.\build-windows-lite.bat
+```
+
+If you prefer a manual command on Windows PowerShell:
+
+```powershell
+py -m pip install -r requirements-dev.txt
+pyinstaller --noconfirm --clean NoFaceNoCase.spec
+```
+
+To reset a bloated virtualenv, delete `.venv` and recreate it from `requirements.txt` for runtime only, or `requirements-dev.txt` if you also want tests and packaging tools.
+
+The Windows build scripts install `requirements-dev.txt` before running PyInstaller, so the frozen app is built from the same dependency set as the source install.
+
+The Windows GitHub Actions workflow now produces both:
+- a one-file `.exe`
+- a zipped folder bundle for users who prefer the unpacked PyInstaller layout
+
+## GitHub Releases
+
+Tag a commit like `v2.0.1` and GitHub Actions will build and publish:
+
+- macOS `.dmg` plus `.zip`
+- Windows one-file `.exe` plus zipped folder bundle
+- Linux `.tar.gz`
+
+The release workflow is in [`.github/workflows/release.yml`](/mnt/c/Users/Lobo/Documents/GitHub/demo%20tool%20final/.github/workflows/release.yml).
+
+## Platform Notes
+
+- Windows, macOS, and Linux are supported through Python, Tkinter, OpenCV, Pillow, and Ultralytics.
+- The app runs locally and does not require API calls.
+- Android is not supported by this Tkinter UI. The core processing code is separated so another UI layer could reuse it later.
+
+## Project Layout
+
+```text
+main.py                         App entry point
+no_face_no_case/app/            Tkinter GUI, splash, styling
+no_face_no_case/core/           Detection, effects, identity, models, processor
+no_face_no_case/infrastructure/ Media loading, inspection, FFmpeg audio muxing
+no_face_no_case/assets/         Runtime styling/model assets
+```

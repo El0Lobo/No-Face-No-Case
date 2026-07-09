@@ -1,28 +1,37 @@
 # -*- mode: python ; coding: utf-8 -*-
-from PyInstaller.utils.hooks import collect_all
+from __future__ import annotations
 
-datas = [('yolov11n-face.pt', '.'), ('Ⓐ.png', '.'), ('PixelifySans-Regular.ttf', '.'), ('ⒶCME.png', '.'), ('splash.png', '.'), ('disabled.png', '.'), ('enabled.png', '.'), ('default.png', '.')]
-binaries = [('C:\\Users\\Lobo\\Desktop\\demo tool final\\.venv\\Lib\\site-packages\\ffmpeg\\bin\\ffmpeg.exe', '.')]
+from pathlib import Path
+
+from PyInstaller.utils.hooks import collect_all, collect_dynamic_libs
+
+# PyInstaller executes spec files without defining __file__, so anchor paths to the build cwd.
+project_root = Path.cwd()
+asset_dir = project_root / "no_face_no_case" / "assets"
+
+datas = []
+for path in sorted(asset_dir.iterdir()):
+    if path.is_file():
+        datas.append((str(path), "assets"))
+
+binaries = []
 hiddenimports = []
-tmp_ret = collect_all('tkinter')
-datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
-tmp_ret = collect_all('ultralytics')
-datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
-tmp_ret = collect_all('ttkthemes')
-datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
-tmp_ret = collect_all('tkcalendar')
-datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
-tmp_ret = collect_all('PIL')
-datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
-tmp_ret = collect_all('cv2')
-datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
-tmp_ret = collect_all('ffmpeg')
-datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 
+for package in ("PIL", "tkcalendar", "ultralytics"):
+    pkg_datas, pkg_binaries, pkg_hiddenimports = collect_all(package)
+    datas += pkg_datas
+    binaries += pkg_binaries
+    hiddenimports += pkg_hiddenimports
+
+# OpenCV needs its native extension and support DLLs bundled explicitly.
+binaries += collect_dynamic_libs("cv2")
+hiddenimports.append("cv2")
+hiddenimports.append("onnxruntime")
+hiddenimports.append("onnxruntime.capi._pybind_state")
 
 a = Analysis(
-    ['main.py'],
-    pathex=[],
+    ["main.py"],
+    pathex=[str(project_root)],
     binaries=binaries,
     datas=datas,
     hiddenimports=hiddenimports,
@@ -41,7 +50,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='NoFaceNoCase',
+    name="No Face No Case",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -54,5 +63,15 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['Ⓐ.icns'],
+    icon=str(asset_dir / "icon.ico"),
+)
+
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.datas,
+    strip=False,
+    upx=True,
+    upx_exclude=[],
+    name="No Face No Case",
 )
