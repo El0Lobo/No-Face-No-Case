@@ -1,6 +1,5 @@
-opencv-python
-ultralytics
-tkcalendar
-ttkthemes
-Pillow
-ffmpeg-python
+opencv-python>=4.9
+Pillow>=10.0
+onnxruntime>=1.17
+tkcalendar>=1.6
+ultralytics>=8.0

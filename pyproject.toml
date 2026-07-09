@@ -1,35 +1,38 @@
 [build-system]
-requires = ["setuptools", "wheel", "cx_Freeze"]
+requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "no-face-no-case"
-version = "1.0.0"
-description = "Video and image processing tool with face effects using YOLO and OpenCV."
-authors = [
-    {name = "Your Name", email = "your.email@example.com"}
-]
+version = "2.0.0"
+description = "Cross-platform media privacy planner for face pixelation and protected clear regions."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "ACME Prototypes" }]
 dependencies = [
-    "opencv-python",
-    "pillow",
-    "tkcalendar",
-    "ttkthemes",
-    "ultralytics",
-    "ffmpeg-python"
+    "opencv-python>=4.9",
+    "Pillow>=10.0",
+    "onnxruntime>=1.17",
+    "tkcalendar>=1.6",
+    "ultralytics>=8.0",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "pytest",
-    "flake8"
+    "pytest>=8.0",
+    "ruff>=0.5",
+    "pyinstaller>=6.0",
 ]
 
-[project.urls]
-homepage = "https://your-project-homepage.com"
-repository = "https://github.com/your-repo-url"
+[project.scripts]
+no-face-no-case = "main:main"
+
+[tool.setuptools]
+packages = ["no_face_no_case", "no_face_no_case.app", "no_face_no_case.core", "no_face_no_case.infrastructure"]
 
 [tool.setuptools.package-data]
-no-face-no-case = ["*.png", "*.ttf", "*.ico", "*.exe", "yolov11n-face.pt"]
+no_face_no_case = ["assets/*"]
 
-[tool.setuptools.scripts]
-run-no-face-no-case = "main:main"
+[tool.ruff]
+line-length = 120
+target-version = "py310"
